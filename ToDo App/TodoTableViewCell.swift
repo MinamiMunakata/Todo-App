@@ -9,13 +9,20 @@
 import UIKit
 
 class TodoTableViewCell: UITableViewCell {
+    // images
+    let checked = UIImage(named: "checked")
+    let unchecked = UIImage(named: "unchecked")
+    
 
+    @IBOutlet weak var checkboxButton: UIButton!
     @IBOutlet weak var priorityImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        checkboxButton.setImage(unchecked, for: .normal)
+        checkboxButton.setImage(checked, for: .selected)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -23,5 +30,10 @@ class TodoTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    @IBAction func checkon(_ sender: UIButton) {
+        checkboxButton.isSelected = !checkboxButton.isSelected
+    }
+    
 
 }

@@ -34,9 +34,26 @@ class MasterViewController: UITableViewController {
 
     @objc
     func insertNewTodo(_ sender: Any) {
-        todoList.insert(Todo(withTitle: "Test", andDescription: "Example"), at: 0)
-        let indexPath = IndexPath(row: 0, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
+        let alert = UIAlertController(title: "TODO", message: "Create a new todo?", preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "Input a title"
+        }
+        alert.addTextField { (textField) in
+            textField.placeholder = "Write a description"
+        }
+        let action = UIAlertAction(title: "OK", style: .default) { (action) in
+            let title = alert.textFields![0] as UITextField
+            let descript = alert.textFields![1] as UITextField
+            self.todoList.insert(Todo(withTitle: title.text ?? "Title", andDescription: descript.text ?? "Description"), at: 0)
+            let indexPath = IndexPath(row: 0, section: 0)
+            self.tableView.insertRows(at: [indexPath], with: .automatic)
+        }
+        alert.addAction(action)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            // write action when the user choose 'cancel'
+        }))
+        self.present(alert, animated: true, completion: nil)
+
     }
 
     // MARK: - Segues
