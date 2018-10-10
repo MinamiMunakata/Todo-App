@@ -10,6 +10,9 @@ import UIKit
 
 class TodoTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var priorityImage: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

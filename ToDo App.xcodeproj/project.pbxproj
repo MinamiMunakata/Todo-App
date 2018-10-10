@@ -15,6 +15,7 @@
 		D8197C30216D453C0059FB5B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8197C2E216D453C0059FB5B /* LaunchScreen.storyboard */; };
 		D8197C38216D4B050059FB5B /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8197C37216D4B050059FB5B /* Todo.swift */; };
 		D8197C3A216D56020059FB5B /* TodoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8197C39216D56020059FB5B /* TodoTableViewCell.swift */; };
+		D8E99ECD216E78D200DA0A65 /* Priority.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E99ECC216E78D200DA0A65 /* Priority.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		D8197C31216D453C0059FB5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8197C37216D4B050059FB5B /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		D8197C39216D56020059FB5B /* TodoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoTableViewCell.swift; sourceTree = "<group>"; };
+		D8E99ECC216E78D200DA0A65 /* Priority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Priority.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,12 +65,13 @@
 				D8197C23216D453B0059FB5B /* AppDelegate.swift */,
 				D8197C25216D453B0059FB5B /* MasterViewController.swift */,
 				D8197C27216D453B0059FB5B /* DetailViewController.swift */,
+				D8197C39216D56020059FB5B /* TodoTableViewCell.swift */,
+				D8197C37216D4B050059FB5B /* Todo.swift */,
+				D8E99ECC216E78D200DA0A65 /* Priority.swift */,
 				D8197C29216D453B0059FB5B /* Main.storyboard */,
 				D8197C2C216D453C0059FB5B /* Assets.xcassets */,
 				D8197C2E216D453C0059FB5B /* LaunchScreen.storyboard */,
 				D8197C31216D453C0059FB5B /* Info.plist */,
-				D8197C37216D4B050059FB5B /* Todo.swift */,
-				D8197C39216D56020059FB5B /* TodoTableViewCell.swift */,
 			);
 			path = "ToDo App";
 			sourceTree = "<group>";
@@ -149,6 +152,7 @@
 				D8197C24216D453B0059FB5B /* AppDelegate.swift in Sources */,
 				D8197C3A216D56020059FB5B /* TodoTableViewCell.swift in Sources */,
 				D8197C38216D4B050059FB5B /* Todo.swift in Sources */,
+				D8E99ECD216E78D200DA0A65 /* Priority.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

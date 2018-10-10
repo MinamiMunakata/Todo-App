@@ -11,30 +11,30 @@ import UIKit
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
-    var objects = [Any]()
-
+    var todoList = [Todo]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         navigationItem.leftBarButtonItem = editButtonItem
 
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewTodo(_:)))
         navigationItem.rightBarButtonItem = addButton
-        if let split = splitViewController {
-            let controllers = split.viewControllers
-            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+        
+        for i in 0..<5 {
+            var todo = Todo(withTitle: "TODO " + String(i), andDescription: "")
+            if i % 2 == 0 {
+                todo.todoDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            } else {
+                todo.todoDescription = "Description"
+            }
+            todoList.append(todo)
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-        super.viewWillAppear(animated)
-    }
-
     @objc
-    func insertNewObject(_ sender: Any) {
-        objects.insert(NSDate(), at: 0)
+    func insertNewTodo(_ sender: Any) {
+        todoList.insert(Todo(withTitle: "Test", andDescription: "Example"), at: 0)
         let indexPath = IndexPath(row: 0, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
     }
@@ -44,9 +44,9 @@ class MasterViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
-                let object = objects[indexPath.row] as! NSDate
-                let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = object
+                let todo = todoList[indexPath.row]
+                let controller = segue.destination as! DetailViewController
+                controller.todoItem = todo
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -60,14 +60,15 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return objects.count
+        return todoList.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TodoTableViewCell
 
-        let object = objects[indexPath.row] as! NSDate
-        cell.textLabel!.text = object.description
+        let todo = todoList[indexPath.row]
+        cell.titleLabel.text = todo.title
+        cell.descriptionLabel.text = todo.todoDescription
         return cell
     }
 
@@ -76,15 +77,62 @@ class MasterViewController: UITableViewController {
         return true
     }
 
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let temp = todoList[sourceIndexPath.row]
+        todoList.remove(at: sourceIndexPath.row)
+        todoList.insert(temp, at: destinationIndexPath.row)
+    }
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            objects.remove(at: indexPath.row)
+            todoList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
     }
-
-
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let editPriority = UIContextualAction(style: .normal, title: "Priority") { (action, view, completion) in
+            // TODO: show alert
+            let alert = UIAlertController(title: "TODO", message: "Choose it's priority", preferredStyle: .alert)
+            let highButton = UIAlertAction(title: "HIGHT", style: .default) {
+                (alertAction) in
+                // action when they press OK
+                self.todoList[indexPath.row].priority = .high
+            }
+            let middleButton = UIAlertAction(title: "MIDDLE", style: .default) {
+                (alertAction) in
+                self.todoList[indexPath.row].priority = .middle
+            }
+            let lowButton = UIAlertAction(title: "LOW", style: .default) {
+                (alertAction) in
+                self.todoList[indexPath.row].priority = .low
+            }
+            let actionCancel = UIAlertAction(title: "Cancel", style: .cancel) {
+                (alertAction) in
+                // action when they press Cancel
+            }
+            alert.addAction(highButton)
+            alert.addAction(middleButton)
+            alert.addAction(lowButton)
+            alert.addAction(actionCancel)
+            self.present(alert, animated: true, completion: nil)
+            completion(true)
+        }
+        editPriority.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
+        
+        let deletAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
+            self.todoList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            completion(false)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [editPriority, deletAction])
+    }
 }
 

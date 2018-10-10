@@ -11,10 +11,19 @@ import Foundation
 struct Todo {
     var title: String
     var todoDescription: String
-    var priority: Int
+    var priority: Priority
     var isCompleted: Bool
     
+    init(withTitle title: String, andDescription descript: String) {
+        self.title = title
+        self.todoDescription = descript
+        self.priority = .low
+        self.isCompleted = false
+    }
     
-    
-    
+    enum Priority: String {
+        case low = "low"
+        case middle = "middle"
+        case high = "high"
+    }
 }
