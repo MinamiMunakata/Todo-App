@@ -27,6 +27,7 @@ class MasterViewController: UITableViewController {
                 todo.todoDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
             } else {
                 todo.todoDescription = "Description"
+                todo.isCompleted = true
             }
             todoList.append(todo)
         }
@@ -84,8 +85,18 @@ class MasterViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TodoTableViewCell
 
         let todo = todoList[indexPath.row]
-        cell.titleLabel.text = todo.title
-        cell.descriptionLabel.text = todo.todoDescription
+        if todo.isCompleted {
+            let attributedTitle = NSMutableAttributedString(string: todo.title)
+            let attributedDescript = NSMutableAttributedString(string: todo.todoDescription)
+            attributedTitle.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: attributedTitle.length))
+            attributedDescript.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: attributedDescript.length))
+            cell.titleLabel.attributedText = attributedTitle
+            cell.descriptionLabel.attributedText = attributedDescript
+
+        } else {
+            cell.titleLabel.text = todo.title
+            cell.descriptionLabel.text = todo.todoDescription
+        }
         return cell
     }
 
@@ -114,34 +125,22 @@ class MasterViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let editPriority = UIContextualAction(style: .normal, title: "Priority") { (action, view, completion) in
-            // TODO: show alert
-            let alert = UIAlertController(title: "TODO", message: "Choose it's priority", preferredStyle: .alert)
-            let highButton = UIAlertAction(title: "HIGHT", style: .default) {
-                (alertAction) in
-                // action when they press OK
-                self.todoList[indexPath.row].priority = .high
-            }
-            let middleButton = UIAlertAction(title: "MIDDLE", style: .default) {
-                (alertAction) in
-                self.todoList[indexPath.row].priority = .middle
-            }
-            let lowButton = UIAlertAction(title: "LOW", style: .default) {
-                (alertAction) in
-                self.todoList[indexPath.row].priority = .low
-            }
-            let actionCancel = UIAlertAction(title: "Cancel", style: .cancel) {
-                (alertAction) in
-                // action when they press Cancel
-            }
-            alert.addAction(highButton)
-            alert.addAction(middleButton)
-            alert.addAction(lowButton)
-            alert.addAction(actionCancel)
-            self.present(alert, animated: true, completion: nil)
+        let doneAction = UIContextualAction(style: .normal, title: "Done") { (action, view, completion) in
+            self.todoList[indexPath.row].isCompleted = true
+            
+            let attributedTitle = NSMutableAttributedString(string: self.todoList[indexPath.row].title)
+            let attributedDescript = NSMutableAttributedString(string: self.todoList[indexPath.row].todoDescription)
+            attributedTitle.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: attributedTitle.length))
+            attributedDescript.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: attributedDescript.length))
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TodoTableViewCell
+            print(cell.titleLabel.text!)
+            cell.titleLabel.attributedText = attributedTitle
+            cell.descriptionLabel.attributedText = attributedDescript
+            cell.textLabel?.text = "Hiiiiii"
+            
             completion(true)
         }
-        editPriority.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
+        doneAction.backgroundColor = #colorLiteral(red: 0.3647058904, green: 0.06666667014, blue: 0.9686274529, alpha: 1)
         
         let deletAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
             self.todoList.remove(at: indexPath.row)
@@ -149,7 +148,46 @@ class MasterViewController: UITableViewController {
             completion(false)
         }
         
-        return UISwipeActionsConfiguration(actions: [editPriority, deletAction])
+        return UISwipeActionsConfiguration(actions: [doneAction, deletAction])
     }
+    
+//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        let editPriority = UIContextualAction(style: .normal, title: "Priority") { (action, view, completion) in
+//            // TODO: show alert
+//            let alert = UIAlertController(title: "TODO", message: "Choose it's priority", preferredStyle: .alert)
+//            let highButton = UIAlertAction(title: "HIGHT", style: .default) {
+//                (alertAction) in
+//                // action when they press OK
+//                self.todoList[indexPath.row].priority = .high
+//            }
+//            let middleButton = UIAlertAction(title: "MIDDLE", style: .default) {
+//                (alertAction) in
+//                self.todoList[indexPath.row].priority = .middle
+//            }
+//            let lowButton = UIAlertAction(title: "LOW", style: .default) {
+//                (alertAction) in
+//                self.todoList[indexPath.row].priority = .low
+//            }
+//            let actionCancel = UIAlertAction(title: "Cancel", style: .cancel) {
+//                (alertAction) in
+//                // action when they press Cancel
+//            }
+//            alert.addAction(highButton)
+//            alert.addAction(middleButton)
+//            alert.addAction(lowButton)
+//            alert.addAction(actionCancel)
+//            self.present(alert, animated: true, completion: nil)
+//            completion(true)
+//        }
+//        editPriority.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
+//
+//        let deletAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
+//            self.todoList.remove(at: indexPath.row)
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//            completion(false)
+//        }
+//
+//        return UISwipeActionsConfiguration(actions: [editPriority, deletAction])
+//    }
 }
 
