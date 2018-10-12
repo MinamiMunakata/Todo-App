@@ -11,14 +11,18 @@ import Foundation
 struct Todo {
     var title: String
     var todoDescription: String
-    var priority: Priority
+    var priority: Int
     var isCompleted: Bool
     
-    init(withTitle title: String, andDescription descript: String) {
+    init(withTitle title: String, andDescription descript: String, andPriority level:Int) {
         self.title = title
         self.todoDescription = descript
-        self.priority = .low
+        self.priority = level
         self.isCompleted = false
+    }
+    
+    func printDescription() {
+        print("Title: \(self.title), Priority: \(self.priority)")
     }
     
     enum Priority: String {
@@ -27,3 +31,4 @@ struct Todo {
         case high = "high"
     }
 }
+
