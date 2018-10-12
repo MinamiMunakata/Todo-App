@@ -12,6 +12,8 @@ class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
     var todoList = [Todo]()
+    var titles = ["Go to a post office", "Study programming", "Call my mom", "Buy bananas", "Laundry"]
+    
     var datePicker: UIDatePicker = UIDatePicker()
     let toolBar = UIToolbar()
     
@@ -25,11 +27,11 @@ class MasterViewController: UITableViewController {
         navigationItem.rightBarButtonItem = addButton
         
         for i in 0..<5 {
-            var todo = Todo(withTitle: "TODO " + String(i), andDescription: "", andPriority: i)
+            var todo = Todo(withTitle: titles[i], andDescription: "", andPriority: i)
             if i % 2 == 0 {
                 todo.todoDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
             } else {
-                todo.todoDescription = "Description"
+                todo.todoDescription = "Contrary to popular belief, Lorem Ipsum is not simply random text."
             }
             todo.priority = i
             todoList.append(todo)
